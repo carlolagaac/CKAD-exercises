@@ -57,16 +57,43 @@ Create the YAML for a new ResourceQuota called 'myrq' with hard limits of 1 CPU,
 
 ```
 kubectl create quota myrq --hard=limits.cpu=1,limits.memory=1Gi,count/pods=2 -o yaml
+```
 
-apiVersion: v1
-kind: List
-items:
-- apiVersion: v1
-  kind: ResourceQuota
-  metadata:
-    name: myrq
-  spec:
-    hard:
-      cpu: "1000"
-      memory: 1Gi
-      pods: "2"
+Get pods on all namespaces
+
+```
+kubectl get po -A
+```
+
+Create a pod with image nginx called nginx and expose traffic on port 80
+
+```
+kubectl run nginx --image=nginx 
+kubectl expose po nginx --port 80
+```
+
+Change pod's image to nginx:1.26.1 Observe that the container will be restarted as soon as the image gets pulled
+```
+kubectl set image pod/nginx nginx=nginx:1.26.1
+```
+
+Get nginx pod's ip created in previous step, use a temp busybox image to wget its '/'
+
+kubectl get po -o wide 
+kubectl run busybox --image=busybox --rm -it --restart=Never -- wget -O- 10.1.1.131:8
+
+Get nginx pod's YAML
+```
+kubectl get po nginx -o yaml
+```
+
+Get information about the pod, including details about potential issues (e.g. pod hasn't started)
+```
+kubectl describe po nginx
+```
+
+Get pod logs
+```
+kubectl logs nginx
+```
+
