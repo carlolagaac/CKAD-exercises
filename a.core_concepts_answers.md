@@ -97,3 +97,23 @@ Get pod logs
 kubectl logs nginx
 ```
 
+Execute a simple shell on the nginx pod
+```
+ kubectl exec nginx  -it -- /bin/sh
+```
+
+Create a busybox pod that echoes 'hello world' and then exits
+```
+kubectl run busybox --image=busybox -it --restart=Never -- echo "hello world"
+```
+
+Do the same, but have the pod deleted automatically when it's completed
+```
+kubectl run busybox --image=busybox --rm -it --restart=Never -- echo "hello world"
+```
+
+Create an nginx pod and set an env value as 'var1=val1'. Check the env value existence within the pod
+```
+kubectl run nginx --image=nginx --env var1=val1
+kubectl exec nginx -it /bin/sh 
+env
