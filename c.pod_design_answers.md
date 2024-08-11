@@ -107,6 +107,25 @@ status: {}
 
 
 # Taint a node with key tier and value frontend with the effect NoSchedule. Then, create a pod that tolerates this taint.
+```
+kubectl taint node k3d-ckad-exercises-server-1 tier=frontend:NoSchedule
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-tolerate
+spec:
+  containers:
+  - name: frontend-tolerate
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+    - key: "tier"
+      operator: "Equal"
+      value: "frontend"
+      effect: "NoSchedule"
+```
+
 
 
 

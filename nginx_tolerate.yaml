@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend-tolerate
+spec:
+  containers:
+  - name: frontend-tolerate
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+    - key: "tier"
+      operator: "Equal"
+      value: "frontend"
+      effect: "NoSchedule"
