@@ -126,6 +126,12 @@ spec:
       effect: "NoSchedule"
 ```
 
+Create a pod that will be placed on node controlplane. Use nodeSelector and tolerations.
+
+```
+kubectl run nginx-controlplane --image=nginx --dry-run=client -o yaml > nginx-controlplane.yaml
+
+
 
 
 
