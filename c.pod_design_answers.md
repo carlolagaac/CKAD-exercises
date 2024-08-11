@@ -55,6 +55,12 @@ kubectl annotate pod nginx1 --list
 kubectl describe po nginx1 | grep -i annotations
 ```
 
+Remove the annotations for these three pods
+```
+kubectl annotate po nginx{1..3} description- owner-
+```
+
+
 Remove these pods to have a clean state in your cluster
 ```
 for i  in  1 2 3 
@@ -63,6 +69,44 @@ kubectl delete po nginx${i}
 done
 ```
 
+## Pod Placement
+
+Create a pod that will be deployed to a Node that has the label 'accelerator=nvidia-tesla-p100'
+
+```
+kubectl label nodes <your-node-name> accelerator=nvidia-tesla-p100
+kubectl get nodes --show-labels
+
+kubectl run busybox --image=busybox --dry-run=client -o yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox
+  name: busybox
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: accelerator
+            operator: In
+            values:
+            - nvidia-tesla-p100
+
+  containers:
+  - image: busybox
+    name: busybox
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+
+# Taint a node with key tier and value frontend with the effect NoSchedule. Then, create a pod that tolerates this taint.
 
 
 
