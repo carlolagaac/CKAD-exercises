@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx-controlplane
+  name: nginx-controlplane
+spec:
+  containers:
+  - image: nginx
+    name: nginx-controlplane
+    resources: {}
+  nodeSelector: 
+    kubernetes.io/hostname: k3d-ckad-exercises-server-0
+  tolerations:
+    - key: "Role"
+      operator: "Equal"
+      value: "control-plane"
+      effect: "NoSchedule"
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
