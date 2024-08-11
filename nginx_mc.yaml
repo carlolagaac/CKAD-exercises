@@ -28,3 +28,8 @@ spec:
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
+
+
+kubectl run busybox --image busybox --restart=Never -it --rm  -- /bin/sh -c "wget -O- 10.42.2.18"
+
+```
