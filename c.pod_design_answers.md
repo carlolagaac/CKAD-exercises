@@ -130,11 +130,62 @@ Create a pod that will be placed on node controlplane. Use nodeSelector and tole
 
 ```
 kubectl run nginx-controlplane --image=nginx --dry-run=client -o yaml > nginx-controlplane.yaml
+```
+
+### Deployments
+
+Create a deployment with image nginx:1.18.0, called nginx, having 2 replicas, defining port 80 as the port that this container exposes (don't create a service for this deployment)
+```
+kubectl create deployment nginx --image=nginx --replicase=2 --port=80
+kubectl create deploy nginx --image=nginx --replicas=2 --port=80 --dry-run=client -o yaml
 
 
+```
+
+View the YAML of this deployment
+
+```
+kubectl get deploy nginx -o yaml
+```
 
 
+Check how the deployment rollout is going
+```
+kubectl rollout history nginx 
+kubectl rollout status  deployment nginx 
+```
 
 
+Update the nginx image to nginx:1.26.1
+```
+kubectl create deploy nginx --image=nginx --replicas=2 --port=80 --dry-run=client -o yaml > nginx_deploy.yaml
+kubectl replace -f nginx_deploy.yaml 
+
+Check the rollout history and confirm that the replicas are OK
+```
+kubectl rollout status  deployment nginx 
+kubectl rollout history deploy nginx
+kubectl rollout undo deployment nginx
+```
+
+Do an on purpose update of the deployment with a wrong image nginx:1.91
+```
+kubectl set image deploy nginx nginx=nginx:1.91
+kubectl rollout status  deployment nginx   
+```
+
+Verify that something's wrong with the rollout
+```
+kubectl rollout status deploy nginx
+kubectl get po -A
+kubectl describe po nginx-7bb5748555-gpd4r
+```
+
+Return the deployment to the second revision (number 2) and verify the image is nginx:1.19.8
+
+```
+kubectl rollout history deploy nginx
+kubectl rollout undo deploy/nginx --to-revision=2
+```
 
 
