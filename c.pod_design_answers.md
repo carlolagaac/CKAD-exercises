@@ -159,7 +159,8 @@ kubectl rollout status  deployment nginx
 Update the nginx image to nginx:1.26.1
 ```
 kubectl create deploy nginx --image=nginx --replicas=2 --port=80 --dry-run=client -o yaml > nginx_deploy.yaml
-kubectl replace -f nginx_deploy.yaml 
+kubectl replace -f nginx_deploy.yaml
+``` 
 
 Check the rollout history and confirm that the replicas are OK
 ```
