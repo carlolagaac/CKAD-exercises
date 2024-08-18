@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: my-app-v1
+  name: my-app-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app-v1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: my-app-v1
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+        command: ['sh', '-c', 'echo v1 > /var/www/html/index.html' ]
+      
+status: {}
