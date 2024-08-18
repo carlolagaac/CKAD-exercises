@@ -188,4 +188,44 @@ kubectl rollout history deploy nginx
 kubectl rollout undo deploy/nginx --to-revision=2
 ```
 
+Check the details of the fourth revision (number 4)
+```
+kubectl rollout history deploy/nginx --revision=4
+```
+
+Scale the deployment to 5 replicas
+```
+kubectl scale deploy/nginx --replicas=5
+```
+
+Autoscale the deployment, pods between 5 and 10, targetting CPU utilization at 80%
+```
+kubectl autoscale deploy/nginx --min=2 --max=10 --cpu-percent=80
+```
+
+Pause the rollout of the deployment
+``` 
+kubectl rollout pause deploy/nginx
+```
+
+Update the image to nginx:1.19.9 and check that there's nothing going on, since we paused the rollout
+```
+kubectl set image deploy/nginx nginx=nginx:1.9.1
+```
+
+Resume the rollout and check that the nginx:1.19.9 image has been applied
+```
+kubectl rollout resume deploy/nginx
+kubectl describe po nginx-7ffd5c8dc9-wpdqc | grep nginx:1.9.1
+```
+
+Delete the deployment and the horizontal pod autoscaler you created
+```
+kubectl delete deploy nginx
+kubectl get hpa
+kubectl delete hpa nginx
+```
+
+Implement canary deployment by running two instances of nginx marked as version=v1 and version=v2 so that the load is balanced at 75%-25% ratio
+```
 
