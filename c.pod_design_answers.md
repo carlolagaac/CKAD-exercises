@@ -229,4 +229,18 @@ kubectl delete hpa nginx
 
 Implement canary deployment by running two instances of nginx marked as version=v1 and version=v2 so that the load is balanced at 75%-25% ratio
 ```
+#kubectl create deploy my-app-v1 --image=nginx --replicas=3 --dry-run=client -o yaml > my-app-v1.yaml 
+kubectl create deploy my-app-v1 --image=nginx --replicas=3
+kubectl label deploy my-app-v1  version=v1
+kubectl get deploy/my-app-v1 -o yaml > my-app-v1.yaml
+next edit the app label to :
+app: my-app
+
+in both files
+
+kubectl create service loadbalancer my-app --tcp=8080:80 
+
+
+
+
 
