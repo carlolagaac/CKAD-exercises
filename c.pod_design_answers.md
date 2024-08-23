@@ -235,10 +235,41 @@ kubectl label deploy my-app-v1  version=v1
 kubectl get deploy/my-app-v1 -o yaml > my-app-v1.yaml
 next edit the app label to :
 app: my-app
+```
 
 in both files
 
+```
 kubectl create service loadbalancer my-app --tcp=8080:80 
+```
+
+# Jobs
+Create a job named pi with image perl:5.34 that runs the command with arguments "perl -Mbignum=bpi -wle 'print bpi(2000)'"
+```
+kubectl create job pi --image=perl:5.34 -- perl -Mbignum=bpi -wle 'print bpi(2000)'
+```
+
+Wait till it's done, get the output
+```
+kubectl describe job pi
+kubectl get po
+kubectl logs pi-jln5q 
+```
+
+Create a job with the image busybox that executes the command 'echo hello;sleep 30;echo world'
+```
+kubectl create job busybox --image=busybox -- /bin/sh -c 'echo hello;sleep 30;echo world'
+kubectl get job
+kubectl logs busybox-vlpwn
+```
+
+Delete the job
+```
+kubectl delete job busybox
+```
+
+Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
+```
 
 
 
