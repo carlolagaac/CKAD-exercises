@@ -270,6 +270,13 @@ kubectl delete job busybox
 
 Create a job but ensure that it will be automatically terminated by kubernetes if it takes more than 30 seconds to execute
 ```
+kubectl create job 30secs --image busybox --dry-run=client -o yaml -- /bin/sh "-c" "while true;do; sleep 1; echo hi;done" > 30secs.yaml
+add to yaml
+spec:
+  activeDeadlineSeconds: 30
+```
+
+
 
 
 
