@@ -291,11 +291,49 @@ add to yaml
 spec:
   parallelism: 5
   completions: 5
+```
 
 
 ## Cron jobs
 
+Create a cron job with image busybox that runs on a schedule of "*/1 * * * *" and writes 'date; echo Hello from the Kubernetes cluster' to standard output
 
+```
+kubectl create cronjob busybox --image busybox --schedule "*/1 * * * *" -- /bin/sh "-c" 'date; echo Hello from the Kubernetes cluster'
+```
+
+See its logs and delete it
+
+```
+kubectl get po 
+kubectl logs busybox-28742917-x4lns
+kubectl delete cj busybox
+```
+
+Create the same cron job again, and watch the status. Once it ran, check which job ran by the created cron job. Check the log, and delete the cron job
+
+```
+kubectl create cronjob busybox --image busybox --schedule "*/1 * * * *" -- /bin/sh "-c" 'date; echo Hello from the Kubernetes cluster'
+kubectl get cj
+kubectl get jobs --watch
+kubectl get po --show-labels
+kubectl delete cj busybox
+```
+
+Create a cron job with image busybox that runs every minute and writes 'date; echo Hello from the Kubernetes cluster' to standard output. The cron job should be terminated if it successfully starts but takes more than 12 seconds to complete execution.
+
+```
+kubectl create cronjob busybox --image busybox --schedule "*/1 * * * *" -- /bin/sh "-c" 'date; echo Hello from the Kubernetes cluster'
+kubectl get cj busybox -o yaml > cj-busybox.yaml 
+add 
+startingDeadlineSeconds: 17
+to cronjob spec
+```
+
+Create a job from cronjob.
+```
+kubectl create job busybox-job --from=cronjob/busybox 
+```
 
 
 
