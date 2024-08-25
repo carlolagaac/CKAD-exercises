@@ -44,5 +44,10 @@ spec:
 
   restartPolicy: Never
 
+```
+
+Create a configMap 'anotherone' with values 'var6=val6', 'var7=val7'. Load this configMap as env variables into a new nginx pod
+
+
 
 
