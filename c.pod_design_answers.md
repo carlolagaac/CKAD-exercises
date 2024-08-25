@@ -284,6 +284,17 @@ spec:
   activeDeadlineSeconds: 30
   completions: 5
 
+Create the same job, but make it run 5 parallel times
+``` 
+kubectl create job 30secs --image busybox --dry-run=client -o yaml -- /bin/sh "-c" "while true;do; sleep 1; echo hi;done" > 30secs.yaml
+add to yaml
+spec:
+  parallelism: 5
+  completions: 5
+
+
+## Cron jobs
+
 
 
 
