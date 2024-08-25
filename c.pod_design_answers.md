@@ -276,6 +276,14 @@ spec:
   activeDeadlineSeconds: 30
 ```
 
+Create the same job, make it run 5 times, one after the other. Verify its status and delete it
+```
+kubectl create job 30secs --image busybox --dry-run=client -o yaml -- /bin/sh "-c" "while true;do; sleep 1; echo hi;done" > 30secs.yaml
+add to yaml
+spec:
+  activeDeadlineSeconds: 30
+  completions: 5
+
 
 
 

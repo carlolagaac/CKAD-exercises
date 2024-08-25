@@ -4,7 +4,8 @@ metadata:
   name: 30secs
   namespace: default
 spec:
-  activeDeadlineSeconds: 30
+  #activeDeadlineSeconds: 30
+  completions: 5
   template:
     metadata:
       creationTimestamp: null
@@ -15,7 +16,7 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - while true; do echo hello; sleep 30;done
+        - echo hello; sleep 30;echo world
         image: busybox
         imagePullPolicy: Always
         name: 30secs
