@@ -283,6 +283,8 @@ add to yaml
 spec:
   activeDeadlineSeconds: 30
   completions: 5
+```
+
 
 Create the same job, but make it run 5 parallel times
 ``` 
