@@ -47,6 +47,32 @@ spec:
 ```
 
 Create a configMap 'anotherone' with values 'var6=val6', 'var7=val7'. Load this configMap as env variables into a new nginx pod
+```
+kubectl create configmap anotherone --from-literal=var6=val6 --from-literal=var7=val7
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-anotherone
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      command: [ "/bin/sh", "-c", "env" ]
+      env:
+        - name: option1
+          valueFrom:
+            configMapKeyRef:
+              name: anotherone
+              key: var6
+
+        - name: option2
+          valueFrom:
+            configMapKeyRef:
+              name: anotherone
+              key: var7
+
+  restartPolicy: Never
 
 
 
