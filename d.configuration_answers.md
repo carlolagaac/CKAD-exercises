@@ -158,4 +158,31 @@ spec:
         cpu: "100m"
 ```
 
+## Limit Ranges
+
+Create a namespace named limitrange with a LimitRange that limits pod memory to a max of 500Mi and min of 100Mi
+```
+
+kubectl create ns limitrange
+kubectl apply -f limitrange.yaml
+
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: cpu-resource-constraint
+  namespace: limitrange
+spec:
+  limits:
+  - default: # this section defines default limits
+      memory: 500m
+    defaultRequest: # this section defines default requests
+      memory: 100m
+    max: # max and min define the limit range
+      memory: "500m"
+    min:
+      memory: 100m
+    type: Container
+```
+
+
 
