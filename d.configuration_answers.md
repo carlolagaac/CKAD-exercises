@@ -101,8 +101,61 @@ kubectl exec nginx-cm-vol -it -- /bin/sh
 df 
 ```
 
+## Security Context
+Create the YAML for an nginx pod that runs with the user ID 101. No need to create the pod
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-nginx
+spec:
+  securityContext:
+    runAsUser: 101
+  volumes:
+  - name: sec-ctx-vol
+    emptyDir: {}
+  containers:
+  - name: sec-ctx-nginx
+    image: nginx
+```
 
 
+Create the YAML for an nginx pod that has the capabilities "NET_ADMIN", "SYS_TIME" added to its single container
+```
 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-nginx-net-admin
+spec:
+  containers:
+  - name: sec-ctx-nginx-net-admin
+    image: nginx
+    securityContext:
+      capabilities:
+        add: ["NET_ADMIN", "SYS_TIME"]
+```
+
+## Resource requests and limits
+
+Create an nginx pod with requests cpu=100m,memory=256Mi and limits cpu=200m,memory=512Mi
+```
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-nginx
+spec:
+  containers:
+  - name: quota-mem-cpu-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "200m"
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+```
 
 
