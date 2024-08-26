@@ -73,6 +73,35 @@ spec:
               key: var7
 
   restartPolicy: Never
+```
+
+
+Create a configMap 'cmvolume' with values 'var8=val8', 'var9=val9'. Load this as a volume inside an nginx pod on path '/etc/lala'. Create the pod and 'ls' into the '/etc/lala' directory
+
+```
+kubectl create configmap cmvolume --from-literal=var8=val8 --from-literal=var9=val9
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-cm-vol
+spec:
+  containers:
+    - name: nginx-cm
+      image: nginx
+      command: ['sh', '-c', 'echo "The app is running!" && tail -f /dev/null']
+      volumeMounts:
+        - name: configmap-vol
+          mountPath: /etc/lala
+  volumes:
+    - name: configmap-vol
+      configMap:
+        name: cmvolume
+
+kubectl exec nginx-cm-vol -it -- /bin/sh
+df 
+```
+
+
 
 
 
