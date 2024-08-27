@@ -6,11 +6,11 @@ metadata:
 spec:
   limits:
   - default: # this section defines default limits
-      memory: 500m
+      memory: 500Mi
     defaultRequest: # this section defines default requests
-      memory: 100m
+      memory: 100Mi
     max: # max and min define the limit range
-      memory: "500m"
+      memory: "500Mi"
     min:
-      memory: 100m
+      memory: 100Mi
     type: Container

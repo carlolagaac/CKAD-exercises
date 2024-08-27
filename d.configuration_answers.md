@@ -184,5 +184,41 @@ spec:
     type: Container
 ```
 
+Describe the namespace limitrange
+```
+kubectl describe ns limitrange
+Resource Limits
+ Type       Resource  Min   Max   Default Request  Default Limit  Max Limit/Request Ratio
+ ----       --------  ---   ---   ---------------  -------------  -----------------------
+ Container  memory    100m  500m  100m             500m           -
+
+```
+
+
+Create an nginx pod that requests 250Mi of memory in the limitrange namespace
+```
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-250m
+  namespace: limitrange
+spec:
+  containers:
+  - name: nginx-250m
+    image: nginx
+    resources:
+      requests:
+        memory: "250Mi"
+
+```
+
+
+## Resource Quotas
+Create ResourceQuota in namespace one with hard requests cpu=1, memory=1Gi and hard limits cpu=2, memory=2Gi
+
+
+
+
 
 
