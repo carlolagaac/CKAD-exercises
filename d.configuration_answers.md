@@ -281,3 +281,13 @@ spec:
 
 
 # Secrets
+
+Create a secret called mysecret with the values password=mypass
+```
+kubectl create secret generic mysecret --from-literal password=mypass
+```
+
+
+Create a secret called mysecret2 that gets key/value from a file
+```
+kubectl create secret generic mysecret2 --from-env-file=./
