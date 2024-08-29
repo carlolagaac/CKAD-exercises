@@ -217,8 +217,67 @@ spec:
 ## Resource Quotas
 Create ResourceQuota in namespace one with hard requests cpu=1, memory=1Gi and hard limits cpu=2, memory=2Gi
 
+```
+kubectl create ns one --dry-run=client -o yaml 
+
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: mem-cpu-demo
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+
+```
+
+Attempt to create a pod with resource requests cpu=2, memory=3Gi and limits cpu=3, memory=4Gi in namespace one
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-demo
+spec:
+  containers:
+  - name: quota-mem-cpu-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "4Gi"
+        cpu: "3"
+      requests:
+        memory: "3Gi"
+        cpu: "2"
+
+% kubectl apply -f one_pod_rq.yaml
+Error from server (Forbidden): error when creating "one_pod_rq.yaml": pods "quota-mem-cpu-demo" is forbidden: exceeded quota: mem-cpu-demo, requested: limits.cpu=3,limits.memory=4Gi,requests.cpu=2,requests.memory=3Gi, used: limits.cpu=0,limits.memory=0,requests.cpu=0,requests.memory=0, limited: limits.cpu=2,limits.memory=2Gi,requests.cpu=1,requests.memory=1Gi
+
+```
+
+Create a pod with resource requests cpu=0.5, memory=1Gi and limits cpu=1, memory=2Gi in namespace one
 
 
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: quota-mem-cpu-demo
+  namespace: one
+spec:
+  containers:
+  - name: quota-mem-cpu-demo-ctr
+    image: nginx
+    resources:
+      limits:
+        memory: "2Gi"
+        cpu: "1"
+      requests:
+        memory: "1Gi"
+        cpu: "0.5"
+```
 
 
-
+# Secrets
