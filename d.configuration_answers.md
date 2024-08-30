@@ -388,4 +388,64 @@ APIKEY=LmLHbYhsgWZwNifiqaRorH8T
 ```
 
 
+Create a Secret named 'my-secret' of type 'kubernetes.io/ssh-auth' in the namespace 'secret-ops'. Define a single key named 'ssh-privatekey', and point it to the file 'id_rsa' in this directory
+```
+kubectl create secret generic my-secret -n secret-ops --from-file=ssh-privatekey=./id_ckad
+kubectl get secret my-secret -n secret-ops -o yaml > my-secret-ssh-secret-ops.yaml
+
+apiVersion: v1
+data:
+  ssh-privatekey: LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0KYjNCbGJuTnphQzFyWlhrdGRqRUFBQUFBQkc1dmJtVUFBQUFFYm05dVpRQUFBQUFBQUFBQkFBQUFNd0FBQUF0emMyZ3RaVwpReU5UVXhPUUFBQUNBcC9OZ3dCeUJPdHdYL0JvZXMzSGovOUxWL1BJOTB6Nmk0ak9lYlNxek1UZ0FBQUpCUEdJRkJUeGlCClFRQUFBQXR6YzJndFpXUXlOVFV4T1FBQUFDQXAvTmd3QnlCT3R3WC9Cb2VzM0hqLzlMVi9QSTkwejZpNGpPZWJTcXpNVGcKQUFBRUJtKzdBMVlsRTRma0E2bS9ETkdGNzI2ZGI1VzlweHp1S0c2aGFVWmJMUlVTbjgyREFISUU2M0JmOEdoNnpjZVAvMAp0WDg4ajNUUHFMaU01NXRLck14T0FBQUFDMk5oY214dlFGUjVjMjl1QVFJPQotLS0tLUVORCBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0K
+kind: Secret
+type: kubernetes.io/ssh-auth
+metadata:
+  name: my-secret
+  namespace: secret-ops
+type: Opaque
+```
+
+
+Create a Pod named 'consumer' with the image 'nginx' in the namespace 'secret-ops', and consume the Secret as Volume. Mount the Secret as Volume to the path /var/app with read-only access. Open an interactive shell to the Pod, and render the contents of the file.
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: consumer-ssh-pod
+  namespace: secret-ops
+spec:
+  volumes:
+    - name: ssh-volume
+      secret:
+        secretName: my-secret
+  containers:
+    - name: consumer-ssh-pod
+      image: nginx
+      volumeMounts:
+        - name: ssh-volume
+          readOnly: true
+          mountPath: "/var/app"
+
+
+kubectl apply -f nginx_consumer-secret-ops-ssh.yaml 
+pod/consumer-ssh-pod created
+kubectl get po -n secret-ops
+NAME               READY   STATUS    RESTARTS   AGE
+consumer           1/1     Running   0          110m
+consumer-ssh-pod   1/1     Running   0          7s
+
+kubectl exec consumer-ssh-pod -n secret-ops -it -- /bin/sh
+# df
+Filesystem     1K-blocks     Used Available Use% Mounted on
+overlay         61202244 18555604  39505316  32% /
+tmpfs              65536        0     65536   0% /dev
+tmpfs            4015504        4   4015500   1% /var/app
+/dev/vda1       61202244 18555604  39505316  32% /etc/hosts
+shm                65536        0     65536   0% /dev/shm
+tmpfs            4015504       12   4015492   1% /run/secrets/kubernetes.io/serviceaccount
+tmpfs            2007752        0   2007752   0% /sys/firmware
+# cd /var/app
+# ls
+ssh-privatekey
+
 
