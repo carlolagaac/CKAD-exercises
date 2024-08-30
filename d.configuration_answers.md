@@ -290,16 +290,37 @@ kubectl create secret generic mysecret --from-literal password=mypass
 
 Create a secret called mysecret2 that gets key/value from a file
 ```
-kubectl create secret generic mysecret2 --from-env-file=./mysecret2.txt
+kubectl create secret generic mysecret2 --from-env-file=./username.txt
 ```
 
 Get the value of mysecret2
 ```
 kubectl get secret mysecret2 -o yaml
 
-  password2: YWJjMTIz
-  password3: ZGVmNDU2
+data:
+  admin: cGFzc3dvcmQ=
 
-echo YWJjMTIz | base64 -D
+echo cGFzc3dvcmQ= | base64 -D
 ```
+
+Create an nginx pod that mounts the secret mysecret2 in a volume on path /etc/foo
+```
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-foo
+spec:
+  containers:
+  - name: mypod
+    image: nginx
+    volumeMounts:
+    - name: foo
+      mountPath: "/etc/foo"
+      readOnly: true
+  volumes:
+  - name: foo
+    secret:
+      secretName: mysecret
+      optional: true
 

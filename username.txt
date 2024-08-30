@@ -1,2 +1,1 @@
-password2=abc123
-password3=def456
+admin=password
