@@ -586,9 +586,7 @@ kubectl create secret generic mysecret --from-literal=password=mypass
 </p>
 </details>
 
-### Create a secret called mysecret2 that gets key/value from a file
-
-Create a file called username with the value admin:
+### Create a secret called mysecret2 that gets key/value from a file called username with the value admin:
 
 ```bash
 echo -n admin > username

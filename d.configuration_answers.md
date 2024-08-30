@@ -290,4 +290,16 @@ kubectl create secret generic mysecret --from-literal password=mypass
 
 Create a secret called mysecret2 that gets key/value from a file
 ```
-kubectl create secret generic mysecret2 --from-env-file=./
+kubectl create secret generic mysecret2 --from-env-file=./mysecret2.txt
+```
+
+Get the value of mysecret2
+```
+kubectl get secret mysecret2 -o yaml
+
+  password2: YWJjMTIz
+  password3: ZGVmNDU2
+
+echo YWJjMTIz | base64 -D
+```
+
