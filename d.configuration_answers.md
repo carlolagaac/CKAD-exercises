@@ -345,7 +345,47 @@ spec:
 
 
 Create a Secret named 'ext-service-secret' in the namespace 'secret-ops'. Then, provide the key-value pair API_KEY=LmLHbYhsgWZwNifiqaRorH8T as literal.
+```
+kubectl create ns secret-ops
+kubectl create secret generic ext-service-secret --from-literal=API_KEY=LmLHbYhsgWZwNifiqaRorH8T
+```
 
+Consuming the Secret. Create a Pod named 'consumer' with the image 'nginx' in the namespace 'secret-ops' and consume the Secret as an environment variable. Then, open an interactive shell to the Pod, and print all environment variables.
+
+```
+kubectl get secret ext-service-secret -o yaml
+apiVersion: v1
+data:
+  API_KEY: TG1MSGJZaHNnV1p3TmlmaXFhUm9ySDhU
+kind: Secret
+metadata:
+  creationTimestamp: "2024-08-30T07:53:59Z"
+  name: ext-service-secret
+  namespace: secret-ops
+  resourceVersion: "476606"
+  uid: 05eb94f2-65cd-44e5-bb7b-3fdb9b8bfe2a
+type: Opaque
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: consumer
+  namespace: secret-ops
+spec:
+  containers:
+  - name: consumer
+    image: nginx
+    env:
+    - name: APIKEY
+      valueFrom:
+        secretKeyRef:
+          name: ext-service-secret
+          key: API_KEY
+
+ kubectl exec consumer -n secret-ops -it -- /bin/sh
+# env
+APIKEY=LmLHbYhsgWZwNifiqaRorH8T
+```
 
 
 
