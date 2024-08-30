@@ -344,3 +344,8 @@ spec:
 ```
 
 
+Create a Secret named 'ext-service-secret' in the namespace 'secret-ops'. Then, provide the key-value pair API_KEY=LmLHbYhsgWZwNifiqaRorH8T as literal.
+
+
+
+
