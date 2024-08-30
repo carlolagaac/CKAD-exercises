@@ -323,4 +323,24 @@ spec:
     secret:
       secretName: mysecret
       optional: true
+```
+Delete the pod you just created and mount the variable 'username' from secret mysecret2 onto a new nginx pod in env variable called 'USERNAME'
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-env-secret
+spec:
+  containers:
+  - name: nginx-env-secret
+    image: nginx
+    env:
+    - name: USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: mysecret2
+          key: admin
+```
+
 
