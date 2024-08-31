@@ -447,5 +447,39 @@ tmpfs            2007752        0   2007752   0% /sys/firmware
 # cd /var/app
 # ls
 ssh-privatekey
+```
 
 ## ServiceAccounts
+See all the service accounts of the cluster in all namespaces
+```
+kubectl get serviceaccount -A
+```
+
+Create a new serviceaccount called 'myuser'
+```
+kubectl create sa myuser
+```
+
+Create an nginx pod that uses 'myuser' as a service account
+```
+kubectl run nginx-sa --image nginx --dry-run=client -o yaml nginx-sa.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: nginx-sa
+  name: nginx-sa
+  namespace: default
+spec:
+  serviceAccountName: myuser
+  containers:
+  - image: nginx
+    imagePullPolicy: Always
+    name: nginx-sa
+```
+
+Generate an API token for the service account 'myuser'
+
+```
+kubectl create token myuser
+```
