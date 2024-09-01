@@ -103,3 +103,7 @@ spec:
   restartPolicy: Always
 status: {}
 ```
+
+## Debugging
+
+Create a busybox pod that runs 'ls /notexist'. Determine if there's an error (of course there is), see it. In the end, delete the pod
