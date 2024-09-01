@@ -70,3 +70,11 @@ spec:
 status: {}
 ```
 
+
+Lots of pods are running in qa,alan,test,production namespaces. All of these pods are configured with liveness probe. Please list all pods whose liveness probe are failed in the format of <namespace>/<pod name> per line.
+
+```
+kubectl get events -o json | jq -r '.items[] | select(.message | contains("failed liveness probe")).involvedObject | .namespace + "/" + .name'
+kubectl get events -o json | jq -r '.items[] | select(.message | contains("Stopping")).involvedObject | .namespace + "/" + .name'
+```
+
