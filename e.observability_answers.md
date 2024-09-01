@@ -106,4 +106,43 @@ status: {}
 
 ## Debugging
 
-Create a busybox pod that runs 'ls /notexist'. Determine if there's an error (of course there is), see it. In the end, delete the pod
+Create a busybox pod that runs 'ls /notexist'. Determine if there's an error (of course there is), see it. In the end, delete the pod\
+```
+kubectl run busybox-notexist --image=busybox --command /bin/sh --dry-run=client -o yaml > busybox-notexist.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox-notexist
+  name: busybox-notexist
+spec:
+  containers:
+  - command:
+    - /bin/sh
+    - -c 
+    - ls /notexist
+    image: busybox
+    name: busybox-notexist
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+kubectl get po
+NAME               READY   STATUS      RESTARTS      AGE
+busybox-notexist   0/1     Error       2 (20s ago)   30s
+```
+
+
+Create a busybox pod that runs 'notexist'. Determine if there's an error (of course there is), see it. In the end, delete the pod forcefully with a 0 grace period
+
+```
+kubectl run busybox-notexist2 --image=busybox --command notexist 
+kubectl delete po busybox-notexist2 --force=true --grace-period=0
+```
+
+
+
+
