@@ -78,3 +78,28 @@ kubectl get events -o json | jq -r '.items[] | select(.message | contains("faile
 kubectl get events -o json | jq -r '.items[] | select(.message | contains("Stopping")).involvedObject | .namespace + "/" + .name'
 ```
 
+## Logging
+Create a busybox pod that runs i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 1; done. Check its logs
+```
+kubectl run busybox-while --image=busybox --command /bin/sh --dry-run=client -o yaml 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: busybox-while
+  name: busybox-while
+spec:
+  containers:
+  - command:
+    - /bin/sh
+    - "-c"
+    - 'i=0; while true; do echo "$i: $(date)"; i=$((i+1)); sleep 5; done'
+    image: busybox
+    name: busybox-while
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
