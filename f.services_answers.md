@@ -16,3 +16,13 @@ NAME         ENDPOINTS                                         AGE
 nginx        10.42.2.83:80                                     85s
 
 ```
+
+Get service's ClusterIP, create a temp busybox pod and 'hit' that IP with wget
+```
+kubectl run busybox --rm --image=busybox -it --restart=Never --
+wget 10.42.2.83
+Connecting to 10.42.2.83 (10.42.2.83:80)
+saving to 'index.html'
+/ # exit
+pod "busybox" deleted
+```
