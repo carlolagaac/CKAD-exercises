@@ -143,6 +143,10 @@ kubectl run busybox-notexist2 --image=busybox --command notexist
 kubectl delete po busybox-notexist2 --force=true --grace-period=0
 ```
 
+Get CPU/memory utilization for nodes (metrics-server must be running)
+```
+kubectl top node
+```
 
 
 
