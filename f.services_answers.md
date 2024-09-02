@@ -42,5 +42,12 @@ nginx        NodePort    10.43.207.251   <none>        80:30234/TCP   18m
 
 Create a deployment called foo using image 'dgkanatsios/simpleapp' (a simple server that returns hostname) and 3 replicas. Label it as 'app=foo'. Declare that containers in this pod will accept traffic on port 8080 (do NOT create a service yet)
 
+```
+kubectl create deploy foo --image=dgkanatsios/simpleapp --replicas=3 --port=8080 --dry-run=client 
+```
+
+Get the pod IPs. Create a temp busybox pod and try hitting them on port 8080
+```
+kubectl run busybox --image=busybos --rm -it --restart=Never -- 
 
 
