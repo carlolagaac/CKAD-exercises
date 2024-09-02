@@ -26,3 +26,20 @@ saving to 'index.html'
 / # exit
 pod "busybox" deleted
 ```
+
+Convert the ClusterIP to NodePort for the same service and find the NodePort port. Hit service using Node's IP. Delete the service and the pod at the end.
+```
+kubectl edit svc nginx
+change
+ type: ClusterIP
+to
+ type: NodePort
+
+ubectl get svc                                                
+NAME         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+nginx        NodePort    10.43.207.251   <none>        80:30234/TCP   18m
+```
+
+
+
+
