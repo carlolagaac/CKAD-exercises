@@ -48,6 +48,20 @@ kubectl create deploy foo --image=dgkanatsios/simpleapp --replicas=3 --port=8080
 
 Get the pod IPs. Create a temp busybox pod and try hitting them on port 8080
 ```
-kubectl run busybox --image=busybos --rm -it --restart=Never -- 
+kubectl run busybox --image=busybox --rm -it --restart=Never -- 
+
+wget 10.42.0.27:8080
+Connecting to 10.42.0.27:8080 (10.42.0.27:8080)
+saving to 'index.html'
+index.html           100% |*******************************************************************************************************|    54  0:00:00 ETA
+'index.html' saved
+```
 
 
+Create a service that exposes the deployment on port 6262. Verify its existence, check the endpoints
+```
+kubectl expose deployment nginx --port=6262 --target-port=8080
+kubctl get ep 
+kubectl get ep
+NAME         ENDPOINTS                                         AGE
+foo          10.42.0.27:8080,10.42.1.24:8080,10.42.2.60:8080   20s
