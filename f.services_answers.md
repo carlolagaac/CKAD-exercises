@@ -65,3 +65,23 @@ kubctl get ep
 kubectl get ep
 NAME         ENDPOINTS                                         AGE
 foo          10.42.0.27:8080,10.42.1.24:8080,10.42.2.60:8080   20s
+```
+
+Create a temp busybox pod and connect via wget to foo service. Verify that each time there's a different hostname returned. Delete deployment and services to cleanup the cluster
+
+
+```
+kubectl run busybox --image=busybox --rm -it --restart=Never -- 
+If you don't see a command prompt, try pressing enter.
+/ # 
+/ # 
+/ # wget -c 10.43.29.134:6262
+Connecting to 10.43.29.134:6262 (10.43.29.134:6262)
+saving to 'index.html'
+index.html           100% |**********************************************************************************************************|    54  0:00:00 ETA
+'index.html' saved
+/ # more index.html
+Hello world from foo-5566d9bc7c-wdx9d and version 2.0
+Hello world from foo-5566d9bc7c-w8bfm and version 2.0
+Hello world from foo-5566d9bc7c-wxrmc and version 2.0
+```
