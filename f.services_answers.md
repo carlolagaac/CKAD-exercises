@@ -84,4 +84,13 @@ index.html           100% |*****************************************************
 Hello world from foo-5566d9bc7c-wdx9d and version 2.0
 Hello world from foo-5566d9bc7c-w8bfm and version 2.0
 Hello world from foo-5566d9bc7c-wxrmc and version 2.0
+
+kubectl delete svc foo
+kubectl delete deploy foo
 ```
+
+Create an nginx deployment of 2 replicas, expose it via a ClusterIP service on port 80. Create a NetworkPolicy so that only pods with labels 'access: granted' can access the deployment and apply it
+
+```
+kubectl create deploy nginx-deploy --image=nginx --replicas=2 --expose=80
+kubectl update deploy nginx-deploy 
