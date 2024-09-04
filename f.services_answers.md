@@ -92,5 +92,44 @@ kubectl delete deploy foo
 Create an nginx deployment of 2 replicas, expose it via a ClusterIP service on port 80. Create a NetworkPolicy so that only pods with labels 'access: granted' can access the deployment and apply it
 
 ```
-kubectl create deploy nginx-deploy --image=nginx --replicas=2 --expose=80
-kubectl update deploy nginx-deploy 
+kubectl create deploy nginx-deploy --image=nginx --replicas=2 --port=80
+kubectl expose deploy nginx-deploy
+kubectl label deploy nginx-deploy access=granted
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: granted-pods
+  
+spec:
+  podSelector:
+    matchLabels:
+      access: granted
+  policyTypes:
+  - Ingress
+  ingress: 
+  - from: 
+    - podSelector:
+        matchLabels:
+          access: granted
+
+kubectl get svc 
+NAME           TYPE           CLUSTER-IP      EXTERNAL-IP                        PORT(S)          AGE
+nginx-deploy   ClusterIP      10.43.180.33    <none>                             80/TCP           9m24s
+
+kubectl get ep
+NAME           ENDPOINTS                                               AGE
+nginx-deploy   10.42.1.58:80,10.42.2.62:80                             10m
+
+
+kubectl run busybox --image=busybox --labels=access=granted --rm -it --restart=Never -- 
+
+wget -c 10.43.180.33
+Connecting to 10.43.180.33 (10.43.180.33:80)
+saving to 'index.html'
+index.html           100% |*************************************************************************************************|   615  0:00:00 ETA
+'index.html' saved
+
+```
+
+ 
