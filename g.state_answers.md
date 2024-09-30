@@ -52,3 +52,9 @@ cp /etc/passwd /etc/foo/passwd
 kubectl exec busybox -c busybox2 -it -- /bin/sh 
 cat /etc/foo/passwd
 
+```
+
+Create a PersistentVolume of 10Gi, called 'myvolume'. Make it have accessMode of 'ReadWriteOnce' and 'ReadWriteMany', storageClassName 'normal', mounted on hostPath '/etc/foo'. Save it on pv.yaml, add it to the cluster. Show the PersistentVolumes that exist on the cluster
+
+
+
