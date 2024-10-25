@@ -20,4 +20,4 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - k3d-ckad-practice-server-1
+          - k3d-ckad-exercises-server-1
